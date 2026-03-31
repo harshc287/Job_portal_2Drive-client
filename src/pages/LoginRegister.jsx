@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { authApi } from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
 const LoginRegister = ({ setUser }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
 
+  const navigate = useNavigate();
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
@@ -14,11 +16,19 @@ const LoginRegister = ({ setUser }) => {
         ? await authApi.login(formData)
         : await authApi.register(formData);
 
-      // Store token with user
       localStorage.setItem('user', JSON.stringify({ ...data.user, token: data.token }));
+      localStorage.setItem('token', data.token);
       setUser({ ...data.user, token: data.token });
       alert(`${isLogin ? 'Login' : 'Register'} successful!`);
-    } catch (err) {
+
+      if (data.user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/jobs');
+      }
+    } 
+    
+    catch (err) {
       alert(err.message);
     }
   };

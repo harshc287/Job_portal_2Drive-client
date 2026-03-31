@@ -12,7 +12,7 @@ const Navbar = ({ user, setUser }) => {
         <span className="navbar-brand">Job Portal</span>
         {user && (
           <div className="d-flex align-items-center">
-            <span className="text-white me-3">{user.name}</span>
+            <span className="text-white me-3">{user.name}  ({user.role})</span>
             <button className="btn btn-danger btn-sm" onClick={logout}>
               Logout
             </button>

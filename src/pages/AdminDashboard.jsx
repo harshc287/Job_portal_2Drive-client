@@ -51,19 +51,27 @@ const AdminDashboard = () => {
         <button className="btn btn-primary" type="submit">Create Job</button>
       </form>
 
-      <h3>Jobs & Applicants</h3>
-      {jobs.map(job => (
-        <div key={job._id} className="card mb-2 p-2">
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h5>{job.title}</h5>
-              <p>{job.description}</p>
-              <p><strong>Location:</strong> {job.location}</p>
-            </div>
-            <button className="btn btn-info" onClick={() => viewApplicants(job._id)}>View Applicants</button>
-          </div>
+<div className="container mt-4">
+  <h3 className="mb-4">Jobs & Applicants</h3>
+  {jobs.map(job => (
+    <div key={job._id} className="card mb-3 shadow-sm">
+      <div className="card-body d-flex justify-content-between align-items-center">
+        <div>
+          <h5 className="card-title">{job.title}</h5>
+          <p className="card-text">{job.description}</p>
+          <p className="mb-1"><strong>Location:</strong> {job.location}</p>
+          <p className="mb-0"><strong>Posted By:</strong> {job.createdBy?.name || 'Admin'} ({job.createdBy?.email || 'N/A'})</p>
         </div>
-      ))}
+        <button 
+          className="btn btn-primary btn-sm"
+          onClick={() => viewApplicants(job._id)}
+        >
+          View Applicants
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
       {selectedJob && <ApplicantModal applicants={applicants} onClose={() => setSelectedJob(null)} />}
     </div>

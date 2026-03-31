@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-// Base API instance
 const API = axios.create({
-  baseURL: 'http://localhost:3005/api', // Change if backend port differs
+  baseURL: 'http://localhost:3005/api', 
 });
 
-// Attach token to all requests automatically
 API.interceptors.request.use(
   (config) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -17,11 +15,9 @@ API.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Centralized error handler
 const handleError = (error) =>
   error.response?.data?.message || error.message || 'Server Error';
 
-// --- AUTH ---
 export const authApi = {
   register: async (data) => {
     try {
@@ -41,11 +37,10 @@ export const authApi = {
   },
 };
 
-// --- JOBS ---
 export const jobsApi = {
-  getJobs: async () => {
+  getJobs: async (page = 1, limit = 3, search = '') => {
     try {
-      const res = await API.get('/jobs');
+      const res = await API.get(`/jobs?page=${page}&limit=${limit}&search=${search}`);
       return res.data;
     } catch (err) {
       throw new Error(handleError(err));
@@ -61,7 +56,6 @@ export const jobsApi = {
   },
 };
 
-// --- APPLICATIONS ---
 export const applicationsApi = {
   applyJob: async (jobId) => {
     try {
